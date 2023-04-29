@@ -24,10 +24,11 @@ class AppController:
                 if(i > 20): break
                 is_last_iteration = (i // self.max_token) == (total_segments - 1)
                 segment = page_content[i:i + self.max_token]
-                message = f"Context: {segment}\n"
+                message = f"Context {i}: {segment}\n"
+                print(f" fragmento {i}  contexto {message}")
                 result = self.openai_service.make_request(message)
 
-            message = f"Question for the last Context: {question}"
+            message = f"Join each previus context and resolve my question: {question}"
             print(f" Recibiendo mensaje desde open-ai: {message}")
             return self.openai_service.make_request(message)
 
