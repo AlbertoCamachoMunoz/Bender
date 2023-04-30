@@ -1,3 +1,6 @@
+import contextlib
+import io
+import os
 import tkinter as tk
 
 from PIL import ImageTk, Image
@@ -73,3 +76,21 @@ class GraphicInterfaces:
         question = self.entry_chatgpt_question.get()
         result = self.app_controller.send_chatgpt_question(question, self.page_content)
         self.text_chatgpt_result.insert(tk.END, result)
+        self.show_execution_prompt("OK")
+
+    def show_execution_prompt(self, script_description):
+        prompt_window = tk.Toplevel(self.windows)
+        prompt_window.title("Ejecutar script")
+
+        description_label = tk.Label(prompt_window, text="Ejecutar script", wraplength=300)
+        description_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+        yes_button = tk.Button(prompt_window, text="Sí", command=self.execute_script)
+        yes_button.grid(row=1, column=0, padx=10, pady=10)
+
+        no_button = tk.Button(prompt_window, text="No", command=prompt_window.destroy)
+        no_button.grid(row=1, column=1, padx=10, pady=10)
+
+
+    def execute_script(self):
+        os.system("python responseGPT.py")
