@@ -9,7 +9,7 @@ class GraphicInterfaces:
     def __init__(self, app_controller):
         self.app_controller = app_controller
         self.max_token = 2000
-        self.page_content = ""
+        self.dir_data = ""
         self.input_width = 100  # Ajusta el valor según el ancho del botón
 
         # Crea la ventana principal
@@ -27,7 +27,7 @@ class GraphicInterfaces:
         self.entry_message = tk.Entry(self.windows, width=self.input_width)
         self.entry_message.grid(row=0, column=1, sticky='ew', padx=(10, 5))
 
-        # Crea el botón para enviar la pregunta
+        # Crea el botón para buscar en la web
         self.btn_send = tk.Button(self.windows, text="Buscar URL", command=self.find_in_browser)
         self.btn_send.grid(row=0, column=2, sticky='e', padx=(5, 10))
 
@@ -69,12 +69,13 @@ class GraphicInterfaces:
         message = self.entry_message.get()
         self.text_result.insert(tk.END, message)
         self.text_result.insert(tk.END, f" --Recopilando información de la URL {message}")
-        self.page_content = self.app_controller.find_in_browser(message)
-        self.create_chatgpt_interface()
+        self.dir_data = self.app_controller.save_data_from_browser(message)
+        if self.dir_data is not None:
+            self.create_chatgpt_interface()
 
     def send_chatgpt_question(self):
-        question = self.entry_chatgpt_question.get()
-        result = self.app_controller.send_chatgpt_question(question, self.page_content)
+        query = self.entry_chatgpt_question.get()
+        result = self.app_controller.send_chatgpt_question(query)
         self.text_chatgpt_result.insert(tk.END, result)
         self.show_execution_prompt("OK")
 
